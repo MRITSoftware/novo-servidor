@@ -19,10 +19,10 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Setup Gradle 8.2.2
+      - name: Setup Gradle 8.2.1
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 8.2.2
+          gradle-version: 8.2.1
 
       - name: Build debug APK
         run: gradle assembleDebug --no-daemon
