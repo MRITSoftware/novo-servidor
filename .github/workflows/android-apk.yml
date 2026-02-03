@@ -19,13 +19,13 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Install Gradle 8.2.2
-        run: |
-          curl -sSL -o gradle-8.2.2-bin.zip https://services.gradle.org/distributions/gradle-8.2.2-bin.zip
-          unzip -q gradle-8.2.2-bin.zip
+      - name: Setup Gradle 8.2.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.2.2
 
       - name: Build debug APK
-        run: ./gradle-8.2.2/bin/gradle assembleDebug --no-daemon
+        run: gradle assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
