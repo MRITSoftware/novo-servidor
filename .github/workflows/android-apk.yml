@@ -1,0 +1,41 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Validate Android project
+        if: ${{ hashFiles('gradlew') == '' }}
+        run: |
+          echo "Projeto Android não encontrado. Envie um projeto com Gradle."
+          exit 1
+
+      - name: Grant Gradle permission
+        if: ${{ hashFiles('gradlew') != '' }}
+        run: chmod +x ./gradlew
+
+      - name: Build debug APK
+        if: ${{ hashFiles('gradlew') != '' }}
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        if: ${{ hashFiles('gradlew') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: "**/build/outputs/apk/debug/*.apk"
